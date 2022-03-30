@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.td.common.mapper.AvgPriceMapper">
+  <resultMap id="BaseResultMap" type="com.td.common.model.AvgPrice">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="avg" jdbcType="DECIMAL" property="avg" />
+    <result column="avg5" jdbcType="DECIMAL" property="avg5" />
+    <result column="avg10" jdbcType="DECIMAL" property="avg10" />
+    <result column="avg20" jdbcType="DECIMAL" property="avg20" />
+    <result column="avg30" jdbcType="DECIMAL" property="avg30" />
+    <result column="last_10_trend" jdbcType="CHAR" property="last10Trend" />
+    <result column="last_10_month_trend" jdbcType="CHAR" property="last10MonthTrend" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, code, name, date, avg, avg5, avg10, avg20, avg30, last_10_trend, last_10_month_trend, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_avg_price
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_avg_price
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.td.common.model.AvgPrice">
+    insert into t_avg_price (id, code, name, 
+      date, avg, avg5, avg10, 
+      avg20, avg30, last_10_trend, create_time,
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{date,jdbcType=DATE}, #{avg,jdbcType=DECIMAL}, #{avg5,jdbcType=DECIMAL}, #{avg10,jdbcType=DECIMAL}, 
+      #{avg20,jdbcType=DECIMAL}, #{avg30,jdbcType=DECIMAL},{last_10_trend,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.td.common.model.AvgPrice">
+    insert into t_avg_price
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="avg != null">
+        avg,
+      </if>
+      <if test="avg5 != null">
+        avg5,
+      </if>
+      <if test="avg10 != null">
+        avg10,
+      </if>
+      <if test="avg20 != null">
+        avg20,
+      </if>
+      <if test="avg30 != null">
+        avg30,
+      </if>
+      <if test="last10Trend != null">
+        last_10_trend,
+      </if>
+      <if test="last10MonthTrend != null">
+        last_10_month_trend,
+      </if>
+      create_time,
+      update_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="avg != null">
+        #{avg,jdbcType=DECIMAL},
+      </if>
+      <if test="avg5 != null">
+        #{avg5,jdbcType=DECIMAL},
+      </if>
+      <if test="avg10 != null">
+        #{avg10,jdbcType=DECIMAL},
+      </if>
+      <if test="avg20 != null">
+        #{avg20,jdbcType=DECIMAL},
+      </if>
+      <if test="avg30 != null">
+        #{avg30,jdbcType=DECIMAL},
+      </if>
+      <if test="last10Trend != null">
+        #{last10Trend,jdbcType=INTEGER},
+      </if>
+      <if test="last10MonthTrend != null">
+        #{last10MonthTrend,jdbcType=INTEGER},
+      </if>
+      NOW(),
+      NOW()
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.td.common.model.AvgPrice">
+    update t_avg_price
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        date = #{date,jdbcType=DATE},
+      </if>
+      <if test="avg != null">
+        avg = #{avg,jdbcType=DECIMAL},
+      </if>
+      <if test="avg5 != null">
+        avg5 = #{avg5,jdbcType=DECIMAL},
+      </if>
+      <if test="avg10 != null">
+        avg10 = #{avg10,jdbcType=DECIMAL},
+      </if>
+      <if test="avg20 != null">
+        avg20 = #{avg20,jdbcType=DECIMAL},
+      </if>
+      <if test="avg30 != null">
+        avg30 = #{avg30,jdbcType=DECIMAL},
+      </if>
+      <if test="last10Trend != null">
+        last_10_trend = #{last10Trend,jdbcType=INTEGER},
+      </if>
+      <if test="last10MonthTrend != null">
+        last_10_month_trend = #{last10MonthTrend,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      update_time = NOW()
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.td.common.model.AvgPrice">
+    update t_avg_price
+    set code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      date = #{date,jdbcType=DATE},
+      avg = #{avg,jdbcType=DECIMAL},
+      avg5 = #{avg5,jdbcType=DECIMAL},
+      avg10 = #{avg10,jdbcType=DECIMAL},
+      avg20 = #{avg20,jdbcType=DECIMAL},
+      avg30 = #{avg30,jdbcType=CHAR},
+      last_10_trend = #{last10Trend,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

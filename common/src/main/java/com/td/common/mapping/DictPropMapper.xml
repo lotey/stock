@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.td.common.mapper.DictPropMapper">
+  <resultMap id="BaseResultMap" type="com.td.common.model.DictProp">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="idy_segment" jdbcType="VARCHAR" property="idySegment" />
+    <result column="plate" jdbcType="VARCHAR" property="plate" />
+    <result column="lyr" jdbcType="DECIMAL" property="lyr" />
+    <result column="ttm" jdbcType="DECIMAL" property="ttm" />
+    <result column="ceo" jdbcType="VARCHAR" property="ceo" />
+    <result column="artificial_person" jdbcType="VARCHAR" property="artificialPerson" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="latest_lift_ban" jdbcType="DATE" property="latestLiftBan" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, code, name, company_name, province, industry, idy_segment, plate, lyr, ttm, ceo,
+    artificial_person, address, latest_lift_ban, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_dict_prop
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_dict_prop
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.td.common.model.DictProp">
+    insert into t_dict_prop (id, code, name, 
+      company_name, province, industry, 
+      plate, lyr, ttm, ceo, 
+      artificial_person, address, latest_lift_ban, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{companyName,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, 
+      #{plate,jdbcType=VARCHAR}, #{lyr,jdbcType=DECIMAL}, #{ttm,jdbcType=DECIMAL}, #{ceo,jdbcType=VARCHAR}, 
+      #{artificialPerson,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{latestLiftBan,jdbcType=DATE}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.td.common.model.DictProp">
+    insert into t_dict_prop
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="industry != null">
+        industry,
+      </if>
+      <if test="idySegment != null">
+        idy_segment,
+      </if>
+      <if test="plate != null">
+        plate,
+      </if>
+      <if test="lyr != null">
+        lyr,
+      </if>
+      <if test="ttm != null">
+        ttm,
+      </if>
+      <if test="ceo != null">
+        ceo,
+      </if>
+      <if test="artificialPerson != null">
+        artificial_person,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="latestLiftBan != null">
+        latest_lift_ban,
+      </if>
+      create_time,
+      update_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null">
+        #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="idySegment != null">
+        #{idySegment,jdbcType=VARCHAR},
+      </if>
+      <if test="plate != null">
+        #{plate,jdbcType=VARCHAR},
+      </if>
+      <if test="lyr != null">
+        #{lyr,jdbcType=DECIMAL},
+      </if>
+      <if test="ttm != null">
+        #{ttm,jdbcType=DECIMAL},
+      </if>
+      <if test="ceo != null">
+        #{ceo,jdbcType=VARCHAR},
+      </if>
+      <if test="artificialPerson != null">
+        #{artificialPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="latestLiftBan != null">
+        #{latestLiftBan,jdbcType=DATE},
+      </if>
+      NOW(),
+      NOW()
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.td.common.model.DictProp">
+    update t_dict_prop
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null">
+        industry = #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="idySegment != null">
+        idy_segment = #{idySegment,jdbcType=VARCHAR},
+      </if>
+      <if test="plate != null">
+        plate = #{plate,jdbcType=VARCHAR},
+      </if>
+      <if test="lyr != null">
+        lyr = #{lyr,jdbcType=DECIMAL},
+      </if>
+      <if test="ttm != null">
+        ttm = #{ttm,jdbcType=DECIMAL},
+      </if>
+      <if test="ceo != null">
+        ceo = #{ceo,jdbcType=VARCHAR},
+      </if>
+      <if test="artificialPerson != null">
+        artificial_person = #{artificialPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="latestLiftBan != null">
+        latest_lift_ban = #{latestLiftBan,jdbcType=DATE},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.td.common.model.DictProp">
+    update t_dict_prop
+    set code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=VARCHAR},
+      plate = #{plate,jdbcType=VARCHAR},
+      lyr = #{lyr,jdbcType=DECIMAL},
+      ttm = #{ttm,jdbcType=DECIMAL},
+      ceo = #{ceo,jdbcType=VARCHAR},
+      artificial_person = #{artificialPerson,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      latest_lift_ban = #{latestLiftBan,jdbcType=DATE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

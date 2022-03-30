@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.td</groupId>
+        <artifactId>stock-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>server</artifactId>
+    <name>${project.artifactId}</name>
+    <packaging>jar</packaging>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <jsoup.version>1.13.1</jsoup.version>
+        <selenium.version>4.1.0</selenium.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+        <!--导入公共包-->
+        <dependency>
+            <groupId>com.td</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>stock</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!--使用jib插件打包docker镜像-->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <!--from节点用来设置镜像的基础镜像，相当于Docerkfile中的FROM关键字-->
+                    <from>
+                        <!--默认为【<image>openjdk:8-jre-alpine</image>】从docker hub拉取，这里修改为阿里云私服地址-->
+                        <image>registry.cn-hangzhou.aliyuncs.com/xxx/openjdk:8-jre-alpine</image>
+                        <auth>
+                            <username>xxx</username>
+                            <password>xxx</password>
+                        </auth>
+                    </from>
+                    <!--配置最终推送的地址，仓库名，镜像名-->
+                    <to>
+                        <!--配置私有仓库地址-->
+                        <image>registry.cn-hangzhou.aliyuncs.com/xxx/${project.build.finalName}:${project.version}</image>
+                        <auth>
+                            <username>xxx</username>
+                            <password>xxx</password>
+                        </auth>
+                        <tags>
+                            <tag>latest</tag>
+                        </tags>
+                    </to>
+                    <!--允许非https-->
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
+                    <!--容器相关的属性-->
+                    <container>
+                        <!--jvm内存参数-->
+                        <jvmFlags>
+                            <jvmFlag>-Xms512m</jvmFlag>
+                            <jvmFlag>-Xmx4g</jvmFlag>
+                            <jvmFlag>-Duser.timezone=GMT+08</jvmFlag>
+                            <jvmFlag>-Dfile.encoding=UTF8</jvmFlag>
+                        </jvmFlags>
+                        <!--要暴露的端口-->
+                        <ports>
+                            <port>5000</port>
+                        </ports>
+                        <mainClass>com.td.stock.StockApplication</mainClass>
+                        <!--修改镜像默认时间，否则会导致镜像内时区问题-->
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                    </container>
+                </configuration>
+                <!--将jib与mvn构建的生命周期绑定 mvn package自动构造镜像-->
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

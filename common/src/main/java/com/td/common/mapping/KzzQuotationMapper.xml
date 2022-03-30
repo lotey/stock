@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.td.common.mapper.KzzQuotationMapper">
+  <resultMap id="BaseResultMap" type="com.td.common.model.KzzQuotation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="current" jdbcType="DECIMAL" property="current" />
+    <result column="init" jdbcType="DECIMAL" property="init" />
+    <result column="open" jdbcType="DECIMAL" property="open" />
+    <result column="high" jdbcType="DECIMAL" property="high" />
+    <result column="low" jdbcType="DECIMAL" property="low" />
+    <result column="close" jdbcType="DECIMAL" property="close" />
+    <result column="volume" jdbcType="DECIMAL" property="volume" />
+    <result column="volume_amt" jdbcType="DECIMAL" property="volumeAmt" />
+    <result column="offset_rate" jdbcType="DECIMAL" property="offsetRate" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, code, name, date, current, init, open, high, low, close, volume, volume_amt,
+    offset_rate, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_kzz_quotation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_kzz_quotation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.td.common.model.KzzQuotation">
+    insert into t_kzz_quotation (id, code, name, 
+      date, current, init, open, 
+      high, low, close, volume,
+      volume_amt, offset_rate, create_time, 
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{date,jdbcType=DATE}, #{current,jdbcType=DECIMAL}, #{init,jdbcType=DECIMAL}, #{open,jdbcType=DECIMAL}, 
+      #{high,jdbcType=DECIMAL}, #{low,jdbcType=DECIMAL}, #{close,jdbcType=DECIMAL}, #{volume,jdbcType=DECIMAL},
+      #{volumeAmt,jdbcType=DECIMAL}, #{offsetRate,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.td.common.model.KzzQuotation">
+    insert into t_kzz_quotation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="current != null">
+        current,
+      </if>
+      <if test="init != null">
+        init,
+      </if>
+      <if test="open != null">
+        open,
+      </if>
+      <if test="high != null">
+        high,
+      </if>
+      <if test="low != null">
+        low,
+      </if>
+      <if test="close != null">
+        close,
+      </if>
+      <if test="volume != null">
+        volume,
+      </if>
+      <if test="volumeAmt != null">
+        volume_amt,
+      </if>
+      <if test="offsetRate != null">
+        offset_rate,
+      </if>
+      create_time,
+      update_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="current != null">
+        #{current,jdbcType=DECIMAL},
+      </if>
+      <if test="init != null">
+        #{init,jdbcType=DECIMAL},
+      </if>
+      <if test="open != null">
+        #{open,jdbcType=DECIMAL},
+      </if>
+      <if test="high != null">
+        #{high,jdbcType=DECIMAL},
+      </if>
+      <if test="low != null">
+        #{low,jdbcType=DECIMAL},
+      </if>
+      <if test="close != null">
+        #{close,jdbcType=DECIMAL},
+      </if>
+      <if test="volume != null">
+        #{volume,jdbcType=DECIMAL},
+      </if>
+      <if test="volumeAmt != null">
+        #{volumeAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="offsetRate != null">
+        #{offsetRate,jdbcType=DECIMAL},
+      </if>
+      NOW(),
+      NOW()
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.td.common.model.KzzQuotation">
+    update t_kzz_quotation
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        date = #{date,jdbcType=DATE},
+      </if>
+      <if test="current != null">
+        current = #{current,jdbcType=DECIMAL},
+      </if>
+      <if test="init != null">
+        init = #{init,jdbcType=DECIMAL},
+      </if>
+      <if test="open != null">
+        open = #{open,jdbcType=DECIMAL},
+      </if>
+      <if test="high != null">
+        high = #{high,jdbcType=DECIMAL},
+      </if>
+      <if test="low != null">
+        low = #{low,jdbcType=DECIMAL},
+      </if>
+      <if test="close != null">
+        close = #{close,jdbcType=DECIMAL},
+      </if>
+      <if test="volume != null">
+        volume = #{volume,jdbcType=DECIMAL},
+      </if>
+      <if test="volumeAmt != null">
+        volume_amt = #{volumeAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="offsetRate != null">
+        offset_rate = #{offsetRate,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      update_time = NOW()
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.td.common.model.KzzQuotation">
+    update t_kzz_quotation
+    set code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      date = #{date,jdbcType=DATE},
+      current = #{current,jdbcType=DECIMAL},
+      init = #{init,jdbcType=DECIMAL},
+      open = #{open,jdbcType=DECIMAL},
+      high = #{high,jdbcType=DECIMAL},
+      low = #{low,jdbcType=DECIMAL},
+      close = #{close,jdbcType=DECIMAL},
+      volume = #{volume,jdbcType=DECIMAL},
+      volume_amt = #{volumeAmt,jdbcType=DECIMAL},
+      offset_rate = #{offsetRate,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
