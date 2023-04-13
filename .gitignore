@@ -3,5 +3,9 @@
 *.iws
 *.iml
 *.ipr
+*.mvn
 
-logs/
+target/
+
+### VS Code ###
+.vscode/

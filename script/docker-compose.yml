@@ -1,0 +1,32 @@
+version: '3'
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.30
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Shanghai
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+    volumes:
+      - /data/docker/mysql/data:/var/lib/mysql
+      - /data/docker/mysql/config:/etc/mysql/conf.d
+  stock:
+    image: registry.cn-hangzhou.aliyuncs.com/lotey/stock:latest
+    container_name: stock
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      TZ: Asia/Shanghai
+      LANG: en_US.UTF-8
+    depends_on:
+      - mysql
+

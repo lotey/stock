@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8s-test
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-stock-config
+  namespace: k8s-test
+data:
+  mysql-host: k8s-mysql
+  mysql-port: '23806'
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: k8s-stock-secret
+  namespace: k8s-test
+type: Opaque
+data:
+  mysql-username: cm9vdA==
+  mysql-password: ZGIyMDIwRiFAIw==
+---
+# ------------------- Deployment ------------------- #
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # 部署名字
+  name: stock
+  namespace: k8s-test
+spec:
+  replicas: 1
+  # 用来查找关联的 Pod，所有标签都匹配才行
+  selector:
+    matchLabels:
+      app: k8s-stock
+  # 定义 Pod 相关数据
+  template:
+    metadata:
+      labels:
+        app: k8s-stock
+    spec:
+      imagePullSecrets:
+        - name: aliyun-secret
+      # 定义容器，可以多个
+      containers:
+        - name: stock # 容器名字
+          imagePullPolicy: IfNotPresent
+          image: registry.cn-hangzhou.aliyuncs.com/lotey/stock:latest # 镜像
+          ports:
+            - containerPort: 5000
+          env:
+#            - name: MYSQL_SERVICE_PORT
+#              value: '23806'
+            - name: MYSQL_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: k8s-stock-config
+                  key: mysql-host
+            - name: MYSQL_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: k8s-stock-config
+                  key: mysql-port
+            - name: MYSQL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: k8s-stock-secret
+                  key: mysql-username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: k8s-stock-secret
+                  key: mysql-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-stock
+  namespace: k8s-test
+spec:
+  selector:
+    app: k8s-stock
+  type: NodePort
+  ports:
+    - name: stock-v1
+      protocol: TCP
+      port: 6000 #service内部之间互访的端口
+      targetPort: 6000 #docker容器本身开放的端口
+      nodePort: 31000   # #集群开放的端口，端口号应该>=30000
+---
+# ------------------- 引入外部mysql服务 ------------------- #
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: k8s-mysql
+  namespace: k8s-test
+subsets:
+  - addresses:
+      - ip: 106.13.127.169
+    ports:
+      - name: mysql
+        protocol: TCP
+        port: 23806
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-mysql
+  namespace: k8s-test
+spec:
+  type: ClusterIP
+  ports:
+    - name: mysql
+      protocol: TCP
+      port: 23806
+      targetPort: 23806

@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.td</groupId>
             <artifactId>common</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -48,63 +48,110 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!--使用jib插件打包docker镜像-->
             <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>3.2.0</version>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.39.0</version>
                 <configuration>
-                    <!--from节点用来设置镜像的基础镜像，相当于Docerkfile中的FROM关键字-->
-                    <from>
-                        <!--默认为【<image>openjdk:8-jre-alpine</image>】从docker hub拉取，这里修改为阿里云私服地址-->
-                        <image>registry.cn-hangzhou.aliyuncs.com/xxx/openjdk:8-jre-alpine</image>
-                        <auth>
-                            <username>xxx</username>
-                            <password>xxx</password>
-                        </auth>
-                    </from>
-                    <!--配置最终推送的地址，仓库名，镜像名-->
-                    <to>
-                        <!--配置私有仓库地址-->
-                        <image>registry.cn-hangzhou.aliyuncs.com/xxx/${project.build.finalName}:${project.version}</image>
-                        <auth>
-                            <username>xxx</username>
-                            <password>xxx</password>
-                        </auth>
-                        <tags>
-                            <tag>latest</tag>
-                        </tags>
-                    </to>
-                    <!--允许非https-->
-                    <allowInsecureRegistries>true</allowInsecureRegistries>
-                    <!--容器相关的属性-->
-                    <container>
-                        <!--jvm内存参数-->
-                        <jvmFlags>
-                            <jvmFlag>-Xms512m</jvmFlag>
-                            <jvmFlag>-Xmx4g</jvmFlag>
-                            <jvmFlag>-Duser.timezone=GMT+08</jvmFlag>
-                            <jvmFlag>-Dfile.encoding=UTF8</jvmFlag>
-                        </jvmFlags>
-                        <!--要暴露的端口-->
-                        <ports>
-                            <port>5000</port>
-                        </ports>
-                        <mainClass>com.td.stock.StockApplication</mainClass>
-                        <!--修改镜像默认时间，否则会导致镜像内时区问题-->
-                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
-                    </container>
+                    <!-- docker主机地址 -->
+                    <dockerHost>tcp://127.0.0.1:2375</dockerHost>
+                    <registry>registry.cn-hangzhou.aliyuncs.com</registry>
+                    <authConfig>
+                        <username>XXX</username>
+                        <password>XXX</password>
+                    </authConfig>
+                    <!-- 镜像相关信息，用于拉取和推送到指定中央仓库 -->
+                    <images>
+                        <image>
+                            <!-- 镜像名称，格式为：命名空间/仓库名称:镜像版本号,如果registry地址以https开头，则格式为：私服地址/命名空间/仓库名称:镜像版本号-->
+                            <name>
+                                registry.cn-hangzhou.aliyuncs.com/lotey/${project.build.finalName}:${project.version}
+                            </name>
+                            <build>
+                                <!-- dockerfile地址，此插件也支持docker-compose配置 -->
+                                <dockerFile>${project.basedir}/Dockerfile</dockerFile>
+                            </build>
+                        </image>
+                        <image>
+                            <!-- 镜像名称，格式为：命名空间/仓库名称:镜像版本号,如果registry地址以https开头，则格式为：私服地址/命名空间/仓库名称:镜像版本号-->
+                            <name>registry.cn-hangzhou.aliyuncs.com/lotey/${project.build.finalName}:latest</name>
+                            <build>
+                                <!-- dockerfile地址，此插件也支持docker-compose配置 -->
+                                <dockerFile>${project.basedir}/Dockerfile</dockerFile>
+                            </build>
+                        </image>
+                    </images>
                 </configuration>
-                <!--将jib与mvn构建的生命周期绑定 mvn package自动构造镜像-->
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>build-image</id>-->
+<!--                        <phase>install</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                            <goal>push</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
             </plugin>
+
+<!--            &lt;!&ndash;使用jib插件打包docker镜像&ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>com.google.cloud.tools</groupId>-->
+<!--                <artifactId>jib-maven-plugin</artifactId>-->
+<!--                <version>3.2.0</version>-->
+<!--                <configuration>-->
+<!--                    &lt;!&ndash;from节点用来设置镜像的基础镜像，相当于Docerkfile中的FROM关键字&ndash;&gt;-->
+<!--                    <from>-->
+<!--                        &lt;!&ndash;默认为【<image>openjdk:8-jre-alpine</image>】从docker hub拉取，这里修改为阿里云私服地址&ndash;&gt;-->
+<!--                        <image>registry.cn-hangzhou.aliyuncs.com/xxx/openjdk:8-jre-alpine</image>-->
+<!--                        <auth>-->
+<!--                            <username>xxx</username>-->
+<!--                            <password>xxx</password>-->
+<!--                        </auth>-->
+<!--                    </from>-->
+<!--                    &lt;!&ndash;配置最终推送的地址，仓库名，镜像名&ndash;&gt;-->
+<!--                    <to>-->
+<!--                        &lt;!&ndash;配置私有仓库地址&ndash;&gt;-->
+<!--                        <image>registry.cn-hangzhou.aliyuncs.com/xxx/${project.build.finalName}:${project.version}-->
+<!--                        </image>-->
+<!--                        <auth>-->
+<!--                            <username>xxx</username>-->
+<!--                            <password>xxx</password>-->
+<!--                        </auth>-->
+<!--                        <tags>-->
+<!--                            <tag>latest</tag>-->
+<!--                        </tags>-->
+<!--                    </to>-->
+<!--                    &lt;!&ndash;允许非https&ndash;&gt;-->
+<!--                    <allowInsecureRegistries>true</allowInsecureRegistries>-->
+<!--                    &lt;!&ndash;容器相关的属性&ndash;&gt;-->
+<!--                    <container>-->
+<!--                        &lt;!&ndash;jvm内存参数&ndash;&gt;-->
+<!--                        <jvmFlags>-->
+<!--                            <jvmFlag>-Xms512m</jvmFlag>-->
+<!--                            <jvmFlag>-Xmx4g</jvmFlag>-->
+<!--                            <jvmFlag>-Duser.timezone=GMT+08</jvmFlag>-->
+<!--                            <jvmFlag>-Dfile.encoding=UTF8</jvmFlag>-->
+<!--                        </jvmFlags>-->
+<!--                        &lt;!&ndash;要暴露的端口&ndash;&gt;-->
+<!--                        <ports>-->
+<!--                            <port>5000</port>-->
+<!--                        </ports>-->
+<!--                        <mainClass>com.td.stock.StockApplication</mainClass>-->
+<!--                        &lt;!&ndash;修改镜像默认时间，否则会导致镜像内时区问题&ndash;&gt;-->
+<!--                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>-->
+<!--                    </container>-->
+<!--                </configuration>-->
+<!--                &lt;!&ndash;将jib与mvn构建的生命周期绑定 mvn package自动构造镜像&ndash;&gt;-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>
