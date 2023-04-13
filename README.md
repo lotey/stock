@@ -18,4 +18,4 @@
 - 使用maven命令构建和打包，mvn clean install -Dmaven.test.skip=true
 
 # 最后
-## 如果喜欢本项目请star或fork
+## 如果喜欢本项目欢迎star
